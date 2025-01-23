@@ -28,3 +28,6 @@ tests/
 
 huggingface/hub/models*
 huggingface/hub/version_diffusers_cache.txt
+
+trains
+controlnet_imgs

@@ -45,12 +45,16 @@ def run_train(toml_path: str,
         try:
             task.execute()
             result = task.communicate()
+            from feishu.card import send_error,send_info
             if result.returncode != 0:
                 log.error(f"Training failed / 训练失败")
+                send_error('训练失败','训练失败')
             else:
                 log.info(f"Training finished / 训练完成")
+                send_info('训练完成','训练完成')
         except Exception as e:
             log.error(f"An error occurred when training / 训练出现致命错误: {e}")
+            send_error('训练出现致命错误',f"An error occurred when training / 训练出现致命错误: {e}")
 
     coro = asyncio.to_thread(_run)
     asyncio.create_task(coro)

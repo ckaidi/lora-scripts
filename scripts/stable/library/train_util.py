@@ -5318,6 +5318,11 @@ def sample_image_inference(
     i: int = prompt_dict["enum"]
     img_filename = f"{'' if args.output_name is None else args.output_name + '_'}{num_suffix}_{i:02d}_{ts_str}{seed_suffix}.png"
     image.save(os.path.join(save_dir, img_filename))
+    try:
+        from feishu.card import send_info
+        send_info("训练预览图",f"{args.output_name}-第{str(epoch)}轮",img_file=os.path.join(save_dir, img_filename))
+    except:
+        print('通知发送失败')
 
     # wandb有効時のみログを送信
     try:
