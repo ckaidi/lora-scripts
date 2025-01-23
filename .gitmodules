@@ -8,3 +8,7 @@
 	path = feishu
 	url = https://server.chenkaidi.top:448/chenkaidi/feishu.git
 	branch = main
+[submodule "AiTrainDB"]
+	path = AiTrainDB
+	url = https://server.chenkaidi.top:448/chenkaidi/AiTrainDB.git
+	branch = main

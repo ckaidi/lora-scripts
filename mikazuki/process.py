@@ -9,6 +9,9 @@ from mikazuki.log import log
 from mikazuki.tasks import tm
 from mikazuki.launch_utils import base_dir_path
 
+from feishu.card import send_error,send_info
+from AiTrainDB.db import TrainRecord,get_train_task,get_shanghai_now,add_or_update_db
+
 
 def run_train(toml_path: str,
               trainer_file: str = "./scripts/train_network.py",
@@ -45,16 +48,28 @@ def run_train(toml_path: str,
         try:
             task.execute()
             result = task.communicate()
-            from feishu.card import send_error,send_info
+            task_db=get_train_task(task.task_id)
             if result.returncode != 0:
                 log.error(f"Training failed / 训练失败")
                 send_error('训练失败','训练失败')
+                if task_db is not None:
+                    task_db.status='FAILED'
+                    task_db.end_at=get_shanghai_now()
+                    add_or_update_db(task_db,TrainRecord,TrainRecord.id,task.task_id)
             else:
                 log.info(f"Training finished / 训练完成")
                 send_info('训练完成','训练完成')
+                if task_db is not None:
+                    task_db.status='FINISHED'
+                    task_db.end_at=get_shanghai_now()
+                    add_or_update_db(task_db,TrainRecord,TrainRecord.id,task.task_id)
         except Exception as e:
             log.error(f"An error occurred when training / 训练出现致命错误: {e}")
             send_error('训练出现致命错误',f"An error occurred when training / 训练出现致命错误: {e}")
+            if task_db is not None:
+                task_db.status='FAILED'
+                task_db.end_at=get_shanghai_now()
+                add_or_update_db(task_db,TrainRecord,TrainRecord.id,task.task_id)
 
     coro = asyncio.to_thread(_run)
     asyncio.create_task(coro)
