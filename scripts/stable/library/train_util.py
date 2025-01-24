@@ -5323,7 +5323,7 @@ def sample_image_inference(
         tr_dir=''
         for dir in os.listdir('trains'):
             tr_dir=dir
-        kw=tr_dir.split('-')[-1]
+        kw=tr_dir.split('_')[-1]
         send_info(f"{kw}训练预览图",f"{args.output_name}-第{str(epoch)}轮",img_file=os.path.join(save_dir, img_filename))
     except Exception as e:
         print(f'通知发送失败{e}')
