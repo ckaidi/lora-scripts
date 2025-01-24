@@ -5323,7 +5323,16 @@ def sample_image_inference(
         send_info("训练预览图",f"{args.output_name}-第{str(epoch)}轮",img_file=os.path.join(save_dir, img_filename))
     except:
         print('通知发送失败')
-
+    
+    try:
+        if controlnet_image is not None:
+            import base64
+            from ComfyuiRestful.comfyui_restful import ComfyuiClient
+            comfyui=ComfyuiClient('192.168.42.57:8188')
+            comfyui.run('base64',prompt,negative_prompt)
+    except Exception as e:
+        print(f'出现错误{e}')
+        
     # wandb有効時のみログを送信
     try:
         wandb_tracker = accelerator.get_tracker("wandb")
