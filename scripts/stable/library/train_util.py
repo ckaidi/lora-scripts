@@ -5322,6 +5322,8 @@ def sample_image_inference(
         from feishu.card import send_info
         tr_dir=''
         for dir in os.listdir('trains'):
+            if not os.path.isdir(dir):
+                continue
             tr_dir=dir
         kw=tr_dir.split('_')[-1]
         send_info(f"{kw}训练预览图",f"{args.output_name}-第{str(epoch)}轮",img_file=os.path.join(save_dir, img_filename))
