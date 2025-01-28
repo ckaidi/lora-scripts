@@ -31,3 +31,5 @@ huggingface/hub/version_diffusers_cache.txt
 
 trains
 controlnet_imgs
+scripts/stable/feishu
+scripts/stable/ComfyuiRestful
